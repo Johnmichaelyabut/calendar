@@ -2,42 +2,32 @@
 $year = (isset($_GET['year'])) ? $_GET['year']: false;
 $month = (isset($_GET['month'])) ? $_GET['month']: false;
 $day = 0;
-if (($year % 4) != 0) {
-	if($month == 'feb'){
-		$day = 28;
-	}elseif(in_array($month, array('jan','mar','may','jul','aug','oct','dec'))){
+$is_leap = (($year % 4) == 0) ? true: false;
+
+switch($month){
+	case "jan":
+	case "mar":
+	case "may":
+	case "jul":
+	case "aug":
+	case "oct":
+	case "dec":
 		$day = 31;
-	}elseif(in_array($month, array('apr','jun','sept','nov'))){
-		$day = 30;
-	}else{
-	$day = 30;
-	}
-}elseif (($year % 4) == 0) {
-	if($month == 'feb'){
-		$day = 29;
-	}elseif(in_array($month, array('jan','mar','may','jul','aug','oct','dec'))){
-		$day = 31;
-	}elseif(in_array($month, array('apr','jun','sept','nov'))){
-		$day = 30;
-	}else{
-	$day = 30;
-	}
-} else {
-		$day = false;
+		break;
+	case "feb":
+		if($is_leap)
+			$day = 29;
+		else
+			$day = 28;
+		break;
+	default: $day = 30;
 }
 
-if ($day !== false) {
-	echo json_encode(
-		array(
-			'year' => $year,
-			'month' => $month,
-			'result' => 'success',
-			'day'	=> $day)
-		);
-} else {
-	echo json_encode(
-		array(
-			'year' => $year,
-			'month' => $month,
-			'result' => 'failed'));
-}
+
+echo json_encode(
+	array(
+		'year' => $year,
+		'month' => $month,
+		'result' => 'success',
+		'day'	=> $day)
+	);
